@@ -1,6 +1,10 @@
 # define specific class for Agilent E5061B Network Analyzer
 
 import visa
+import time
+
+# Time to wait after sending an instruction
+SLEEP_TIME = 2.0
 
 class AgilentE5061B:
     """Class used to send commands and acquire data from the Agilent E5061B vector network analyzer.
@@ -40,7 +44,7 @@ class AgilentE5061B:
     def write(self, text):
         """Sends a command to the instrument."""
         self.vna_socket.write(text)
-        #time.sleep(SLEEP_TIME)
+        time.sleep(SLEEP_TIME)
         return
 
     def get_frequency_data(self):
@@ -54,7 +58,7 @@ class AgilentE5061B:
     def get_s11_data(self):
         """Get the S11 trace data, returning a sequence of floating point numbers."""
         self.vna_socket.write(":CALC1:PAR1:DEF S11")
-        #time.sleep(SLEEP_TIME)
+        time.sleep(SLEEP_TIME)
         s11_data = self.vna_socket.query(":CALC1:DATA:FDAT?")
         s11_data = s11_data[:len(s11_data) - 1].split(",")
         s11_data = s11_data[::2]
@@ -64,7 +68,7 @@ class AgilentE5061B:
     def get_s12_data(self):
         """Get the S12 trace data, returning a sequence of floating point numbers."""
         self.vna_socket.write(":CALC1:PAR1:DEF S12")
-        #time.sleep(SLEEP_TIME)
+        time.sleep(SLEEP_TIME)
         s12_data = self.vna_socket.query(":CALC1:DATA:FDAT?")
         s12_data = s12_data[:len(s12_data) - 1].split(",")
         s12_data = s12_data[::2]
@@ -74,7 +78,7 @@ class AgilentE5061B:
     def get_s21_data(self):
         """Get the S21 trace data, returning a sequence of floating point numbers."""
         self.vna_socket.write(":CALC1:PAR1:DEF S21")
-        #time.sleep(SLEEP_TIME)
+        time.sleep(SLEEP_TIME)
         s21_data = self.vna_socket.query(":CALC1:DATA:FDAT?")
         s21_data = s21_data[:len(s21_data) - 1].split(",")
         s21_data = s21_data[::2]
@@ -84,7 +88,7 @@ class AgilentE5061B:
     def get_s22_data(self):
         """Get the S22 trace data, returning a sequence of floating point numbers."""
         self.vna_socket.write(":CALC1:PAR1:DEF S22")
-        #time.sleep(SLEEP_TIME)
+        time.sleep(SLEEP_TIME)
         s22_data = self.vna_socket.query(":CALC1:DATA:FDAT?")
         s22_data = s22_data[:len(s22_data) - 1].split(",")
         s22_data = s22_data[::2]
@@ -94,6 +98,8 @@ class AgilentE5061B:
     def set_marker_frequency(self,value):
         """set the center frequency of the VNA"""
         self.vna_socket.write(":CALC1:MARK1:X " + str(value))
+        time.sleep(SLEEP_TIME)
+        return
 
     def get_marker_value(self,marker):
         """get the value of the marker 1 """
@@ -107,15 +113,20 @@ class AgilentE5061B:
     def set_center_frequency(self, freq):
         """set the center frequency of the VNA"""
         self.vna_socket.write(":SENS1:FREQ:CENT " + str(freq))
+        time.sleep(SLEEP_TIME)
         return
 
     def set_span(self,freq):
         """set the span of the VNA"""
         self.vna_socket.write(":SENS1:FREQ:SPAN " + str(freq))
+        time.sleep(SLEEP_TIME)
         return
 
     def set_power(self, power):
         self.vna_socket.write(":SOUR1:POW:GPP " + str(power))
+        time.sleep(SLEEP_TIME)
+        return
+
         return
 
     #def close_connection(self):
