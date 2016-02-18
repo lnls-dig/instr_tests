@@ -55,12 +55,8 @@ class AgilentE5061B:
         """Get the S11 trace data, returning a sequence of floating point numbers."""
         self.vna_socket.write(":CALC1:PAR1:DEF S11")
         #time.sleep(SLEEP_TIME)
-        #return self.vna_socket.query(":CALC1:DATA:FDAT?")
-        self.vna_socket.write(":CALC1:DATA:FDAT?")
-        s11_data = ""
-        while (s11_data[len(s11_data) - 1:] != b"\n"):
-            s11_data += self.vna_socket.read_raw()
-        s11_data = s11_data[:len(s11_data) - 1].split(b",")
+        s11_data = self.vna_socket.query(":CALC1:DATA:FDAT?")
+        s11_data = s11_data[:len(s11_data) - 1].split(",")
         s11_data = s11_data[::2]
         s11_data = [round(float(i),2) for i in s11_data]
         return(s11_data)
@@ -69,12 +65,8 @@ class AgilentE5061B:
         """Get the S12 trace data, returning a sequence of floating point numbers."""
         self.vna_socket.write(":CALC1:PAR1:DEF S12")
         #time.sleep(SLEEP_TIME)
-        #return self.vna_socket.query(":CALC1:DATA:FDAT?")
-        self.vna_socket.write(":CALC1:DATA:FDAT?")
-        s12_data = ""
-        while (s12_data[len(s12_data) - 1:] != b"\n"):
-            s12_data += self.vna_socket.read_raw()
-        s12_data = s12_data[:len(s12_data) - 1].split(b",")
+        s12_data = self.vna_socket.query(":CALC1:DATA:FDAT?")
+        s12_data = s12_data[:len(s12_data) - 1].split(",")
         s12_data = s12_data[::2]
         s12_data = [round(float(i),2) for i in s12_data]
         return(s12_data)
@@ -83,12 +75,8 @@ class AgilentE5061B:
         """Get the S21 trace data, returning a sequence of floating point numbers."""
         self.vna_socket.write(":CALC1:PAR1:DEF S21")
         #time.sleep(SLEEP_TIME)
-        #return self.vna_socket.query(":CALC1:DATA:FDAT?")
-        self.vna_socket.write(":CALC1:DATA:FDAT?")
-        s21_data = ""
-        while (s21_data[len(s21_data) - 1:] != b"\n"):
-            s21_data += self.vna_socket.read_raw()
-        s21_data = s21_data[:len(s21_data) - 1].split(b",")
+        s21_data = self.vna_socket.query(":CALC1:DATA:FDAT?")
+        s21_data = s21_data[:len(s21_data) - 1].split(",")
         s21_data = s21_data[::2]
         s21_data = [round(float(i),2) for i in s21_data]
         return(s21_data)
@@ -97,12 +85,8 @@ class AgilentE5061B:
         """Get the S22 trace data, returning a sequence of floating point numbers."""
         self.vna_socket.write(":CALC1:PAR1:DEF S22")
         #time.sleep(SLEEP_TIME)
-        #return self.vna_socket.query(":CALC1:DATA:FDAT?")
-        self.vna_socket.write(":CALC1:DATA:FDAT?")
-        s22_data = ""
-        while (s22_data[len(s22_data) - 1:] != b"\n"):
-            s22_data += self.vna_socket.read_raw()
-        s22_data = s22_data[:len(s22_data) - 1].split(b",")
+        s22_data = self.vna_socket.query(":CALC1:DATA:FDAT?")
+        s22_data = s22_data[:len(s22_data) - 1].split(",")
         s22_data = s22_data[::2]
         s22_data = [round(float(i),2) for i in s22_data]
         return(s22_data)
