@@ -46,11 +46,8 @@ class AgilentE5061B:
     def get_frequency_data(self):
         """Get the list of frequencies of the instrument sweep, returning a sequence of floating
            point numbers."""
-        self.vna_socket.write(":SENS1:FREQ:DATA?\n")
-        frequency_data = ""
-        while (frequency_data[len(frequency_data) - 1:] != "\n"):
-            frequency_data += self.vna_socket.recv(1024)
-        frequency_data = frequency_data[:len(frequency_data) - 1].split(b",")
+        frequency_data = self.vna_socket.query(":SENS1:FREQ:DATA?")
+        frequency_data = frequency_data[:len(frequency_data) - 1].split(",")
         frequency_data = [float(i) for i in frequency_data]
         return(frequency_data)
 
