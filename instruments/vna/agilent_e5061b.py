@@ -127,6 +127,12 @@ class AgilentE5061B:
         time.sleep(SLEEP_TIME)
         return
 
+    def freq_range(self, start, stop):
+        """set the start and stop frequencies of the windows"""
+        self.vna_socket.write(':SENS:FREQ:START ' + str(start))
+        time.sleep(SLEEP_TIME)
+        self.vna_socket.write(':SENS:FREQ:STOP ' + str(stop))
+        time.sleep(SLEEP_TIME)
         return
 
     #def close_connection(self):
