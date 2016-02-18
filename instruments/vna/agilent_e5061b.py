@@ -104,15 +104,13 @@ class AgilentE5061B:
         ans = ans[:index].strip()
         return(ans)
 
-    def set_center_frequency(self,value):
+    def set_center_frequency(self, freq):
         """set the center frequency of the VNA"""
-        freq = int(value*1000000)
         self.vna_socket.write(":SENS1:FREQ:CENT " + str(freq))
         return
 
-    def set_span(self,value):
-        """set the span of the VNA, in MHz"""
-        freq = int(value*1000000)
+    def set_span(self,freq):
+        """set the span of the VNA"""
         self.vna_socket.write(":SENS1:FREQ:SPAN " + str(freq))
         return
 
