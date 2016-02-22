@@ -2,6 +2,7 @@
 
 import visa
 import time
+import numpy as np
 
 # Time to wait after sending an instruction
 SLEEP_TIME = 2.0
@@ -141,6 +142,18 @@ class AgilentE5061B:
         self.vna_socket.write(':SENS:FREQ:STOP ' + str(stop))
         time.sleep(SLEEP_TIME)
         return
+
+    def get_reflection_impedance(self):
+        self.vna_socket.write(":CALC1:PAR1:DEF S11")
+        time.sleep(SLEEP_TIME)
+        self.vna_socket.write(':CALC1:FORM SMIT')
+        time.sleep(SLEEP_TIME)
+        z_data = self.vna_socket.query(":CALC1:DATA:FDAT?")
+        z_data = z_data[:len(z_data) - 1].split(",")
+        z_data = [round(float(i),2) for i in z_data]
+        z_data = [np.mean(z_data[0:len(z_data):2]), np.mean(z_data[1:len(z_data):2])]
+        return(z_data)
+
 
     #def close_connection(self):
     #    """Close the socket connection to the instrument."""
