@@ -12,9 +12,16 @@ class AgilentE5061B:
 
 
 
-    def __init__(self, rm,  ip):
+    def __init__(self, ip):
         """Class constructor. Here the socket connection to the instrument is initialized. The
         argument required, a string, is the IP adress of the instrument."""
+
+        # test if resource managers exists. Create if it doesn't.
+        if 'rm' in globals():
+            pass
+        else:
+            global rm
+            rm = visa.ResourceManager('@py')
 
         vna_ip = ip
 
