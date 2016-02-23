@@ -50,8 +50,6 @@ class AgilentE5061B:
     """Class used to send commands and acquire data from the Agilent E5061B vector network analyzer.
     """
 
-
-
     def __init__(self, ip):
         """Class constructor. Here the socket connection to the instrument is initialized. The
         argument required, a string, is the IP adress of the instrument."""
@@ -66,14 +64,6 @@ class AgilentE5061B:
         vna_ip = ip
 
         self.vna_socket = rm.open_resource('TCPIP::' + vna_ip + '::inst0::INSTR')
-
-        #self.vna_socket.send(b":SYST:PRES\n")
-        #self.vna_socket.send(b":DISP:WIND1:TRAC1:Y:RLEV -40\n")
-        #self.vna_socket.send(b":DISP:WIND1:TRAC1:Y:PDIV 15\n")
-        #self.vna_socket.send(b":SENS1:SWE:TIME:AUTO ON\n")
-        #self.vna_socket.send(b":SENS1:SWE:POIN 1601\n")
-        #self.vna_socket.send(b":SENS1:SWE:TYPE LIN\n")
-        #self.vna_socket.send(b":SOUR1:POW:GPP 0.0\n")
 
         self.vna_socket.write(":SYST:PRES")
         self.vna_socket.write(":DISP:WIND1:TRAC1:Y:RLEV -40")
