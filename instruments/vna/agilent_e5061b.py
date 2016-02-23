@@ -1,3 +1,42 @@
+#-----------------------------------------------------------------------------
+# Title      : Agilent E5061B Network Analyzer Class
+# Project    :
+#-----------------------------------------------------------------------------
+# File       : agilent_e5061b.py
+# Author     : Vitor Finotti Ferreira  <vfinotti@finotti-Inspiron-7520>
+# Company    : Brazilian Synchrotron Light Laboratory, LNLS/CNPEM
+# Created    : 2016-02-23
+# Last update: 2016-02-23
+# Platform   :
+# Standard   : Python 3.4
+#-----------------------------------------------------------------------------
+# Description:
+#
+# Defines specific class for the Agilent E5061B Network Analyzer using
+# VXI-11 protocol with PyVisa and PyVisa-py
+#-----------------------------------------------------------------------------
+# Copyright (c) 2016 Brazilian Synchrotron Light Laboratory, LNLS/CNPEM
+#
+# This program is free software: you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public License
+# as published by the Free Software Foundation, either version 3 of
+# the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this program. If not, see
+# <http://www.gnu.org/licenses/>.
+#-----------------------------------------------------------------------------
+# Revisions  :
+# Date        Version  Author          Description
+# 2016-feb-23 1.0      vfinotti        Created
+#-----------------------------------------------------------------------------
+
+
 # define specific class for Agilent E5061B Network Analyzer
 
 import visa
