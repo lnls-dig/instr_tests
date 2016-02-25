@@ -183,6 +183,12 @@ class AgilentE5061B:
         z_data = [np.mean(z_data[0:len(z_data):2]), np.mean(z_data[1:len(z_data):2])]
         return(z_data)
 
+    def save_csv(self, file_name):
+        """ Save data in a CSV file inside in the directory D:\instr_tests_csv\ """
+        self.vna_socket.write("MMEM:MDIR \"d:\instr_tests_csv\"")
+        time.sleep(SLEEP_TIME)
+        self.vna_socket.write("MMEM:STOR:FDAT \"d:\instr_tests_csv\\" + file_name + ".csv\"")
+        time.sleep(SLEEP_TIME)
 
     #def close_connection(self):
     #    """Close the socket connection to the instrument."""
