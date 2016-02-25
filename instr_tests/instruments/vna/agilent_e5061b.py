@@ -190,6 +190,38 @@ class AgilentE5061B:
         self.vna_socket.write("MMEM:STOR:FDAT \"d:\instr_tests_csv\\" + file_name + ".csv\"")
         time.sleep(SLEEP_TIME)
 
+    def set_data_format(self, data_format):
+        """ Set data display format. It can be:
+
+        - "MLOGarithmic": Specifies the log magnitude format.
+        - "PHASe": Specifies the phase format.
+        - "GDELay": Specifies the group delay format.
+        - "SLINear": Specifies the Smith chart format (Lin/Phase).
+        - "SLOGarithmic": Specifies the Smith chart format (Log/Phase).
+        - "SCOMplex": Specifies the Smith chart format (Re/Im).
+        - "SMITh": Specifies the Smith chart format (R+jX).
+        - "SADMittance": Specifies the Smith chart format (G+jB).
+        - "PLINear": Specifies the polar format (Lin/Phase).
+        - "PLOGarithmic": Specifies the polar format (Log/Phase).
+        - "POLar": Specifies the polar format (Re/Im).
+        - "MLINear": Specifies the linear magnitude format.
+        - "SWR": Specifies the SWR format.
+        - "REAL": Specifies the real format.
+        - "IMAGinary": Specifies the imaginary format.
+        - "UPHase": Specifies the expanded phase format.
+        - "PPHase": Specifies the positive phase format."""
+
+        self.vna_socket.write(":CALC1:FORM " + data_format)
+
+        value = self.vna_socket.query(":CALC1:FORM?")
+        value = value[:len(value)-1] # removing the \n character
+
+        # Checking if the current value and expected value are the same
+        if value != data_format[:len(value)]:
+            print("Error while setting the data format!")
+            print("Current value: " + value)
+            print("Expected value: " + data_format[:len(value)])
+
     #def close_connection(self):
     #    """Close the socket connection to the instrument."""
     #    self.vna_socket.close()
