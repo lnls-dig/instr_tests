@@ -244,6 +244,36 @@ class AgilentE5061B:
 
         return(slog_data)
 
+    def save_s1p(self, type, format, file_name):
+        """ Save the VNA data in a touchstone .s1p file.
+
+        - Type: "S" - S parameter
+                "Y" - Admittance
+                "Z" - Impedance
+
+        - Format: "MA" - Magnitude Angle
+                  "DB" - dB-angle
+                  "RI" - Real and Imaginary
+
+        """
+
+        device_line = "! " + str(self.vna_socket.query("*IDN?"))
+        date_line = "! Date: " + str(datetime.datetime.today().ctime()) + "\n"
+        option_line = "# Hz  " + type + "  " + format + "  R  " + str(self.vna_socket.query("SENS:CORR:IMP?")) + "\n"
+
+        if type.upper() == "S":
+            if format.upper() == "DB":
+                slog = self.get_slog_data()
+                freq = self.get_frequency_data()
+
+        with open(file_name + '.s1p','w') as f:
+            f.write(device_line)
+            f.write(date_line)
+            f.write(option_line)
+            for i in range(len(freq)):
+                f.write(str(freq[i]) + "\t" + str(slog[0][i]) + "\t" + "\t" + str(slog[1][i]) + "\n")
+
+
     #def close_connection(self):
     #    """Close the socket connection to the instrument."""
     #    self.vna_socket.close()
