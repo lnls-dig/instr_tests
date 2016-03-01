@@ -23,6 +23,12 @@ $ pip3 install pyvisa
 $ pip3 install pyvisa-py
 ```
 
+The Scikit-RF package (>=0.15.1) is also used, being instaled with the following command:
+
+```
+$ pip3 install scikit-rf
+```
+
 ## Documentation
 
 To be done in readthedocs.org
