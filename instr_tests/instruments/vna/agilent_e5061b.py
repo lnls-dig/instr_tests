@@ -42,6 +42,7 @@
 import visa
 import time
 import numpy as np
+import datetime
 
 # Time to wait after sending an instruction
 SLEEP_TIME = 2.0
@@ -221,6 +222,27 @@ class AgilentE5061B:
             print("Error while setting the data format!")
             print("Current value: " + value)
             print("Expected value: " + data_format[:len(value)])
+
+
+    def get_slog_data(self):
+        """Get the SLOG trace data, returning 2 columns: magnitude and phase."""
+
+        #self.vna_socket.write(":CALC1:PAR1:DEF S11")
+        #self.set_data_format("SLOG")
+        time.sleep(SLEEP_TIME)
+
+        slog_data = self.vna_socket.query(":CALC1:SEL:DATA:FDAT?")
+        #print(len(slog_data))
+        slog_data = slog_data[:len(slog_data) - 1].split(",")
+        mag = slog_data[::2]
+        ph  = slog_data[1::2]
+
+        mag = [float(i) for i in mag]
+        ph  = [float(i) for i in ph]
+
+        slog_data = [mag, ph]
+
+        return(slog_data)
 
     #def close_connection(self):
     #    """Close the socket connection to the instrument."""
