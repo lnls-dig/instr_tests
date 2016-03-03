@@ -1,4 +1,4 @@
-__version__ = "0.1dev"
+__version__ = "0.1"
 
 ## Import all module names for coherent reference of namespace
 
