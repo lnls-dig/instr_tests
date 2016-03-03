@@ -23,6 +23,14 @@ following command:
 $ pip3 install -r requirement.txt
 ```
 
+## Instalation
+
+The package can be installed using the setup.py file with the following command:
+
+```
+$ python3 setup.py install
+```
+
 ## Documentation
 
 To be done in readthedocs.org
