@@ -14,19 +14,13 @@ For now, the devices under implementation are:
 
 ## Requirements
 
-The classes need PyVisa >= 1.8 and PyVisa-py >= 0.2 to work properly. They
-can be installed using the following commands:
+The classes need PyVisa >= 1.8 and PyVisa-py >= 0.2 to work properly.The Scikit-RF
+package (>=0.15.1) is also used, and all dependences can be resolved using the
+following command:
 
 
 ```
-$ pip3 install pyvisa
-$ pip3 install pyvisa-py
-```
-
-The Scikit-RF package (>=0.15.1) is also used, being instaled with the following command:
-
-```
-$ pip3 install scikit-rf
+$ pip3 install -r requirement.txt
 ```
 
 ## Documentation
