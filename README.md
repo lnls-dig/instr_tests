@@ -11,6 +11,7 @@ For now, the devices under implementation are:
 
 - Agilent (Keysight) E5061B Network Analyzer
 - Rohde & Schwarz SMA100A Signal Generator
+- Rohde & Schwarz SMB100A Signal Generator
 
 ## Requirements
 
@@ -20,10 +21,10 @@ following command:
 
 
 ```
-$ pip3 install -r requirement.txt
+$ pip3 install -r requirements.txt
 ```
 
-## Instalation
+## Installation
 
 The package can be installed using the setup.py file with the following command:
 
