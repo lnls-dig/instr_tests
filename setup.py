@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 import os
 import io
 
@@ -27,7 +27,7 @@ setup(
     license = "GPLv3",
     keywords = "instruments vxi-11 pyvisa",
     url = "https://github.com/lnls-dig/instr_tests",
-    packages=['instr_tests',],
+    packages = find_packages(),
     long_description = long_description,
     install_requires = install_requires,
     classifiers = [
