@@ -43,6 +43,7 @@ import visa
 import time
 import numpy as np
 import datetime
+import os
 
 # Time to wait after sending an instruction
 SLEEP_TIME = 2.0
@@ -245,7 +246,8 @@ class AgilentE5061B:
         return(slog_data)
 
     def save_s1p(self, type, format, file_name):
-        """ Save the VNA data in a touchstone .s1p file.
+        """ Save the VNA data in a touchstone .s1p file. If creating a subdirectory, use
+        the format "dir_name/file_name" in the file name
 
         - Type: "S" - S parameter
                 "Y" - Admittance
@@ -265,6 +267,9 @@ class AgilentE5061B:
             if format.upper() == "DB":
                 slog = self.get_slog_data()
                 freq = self.get_frequency_data()
+
+
+        os.makedirs(os.getcwd() + "/" + os.path.dirname(file_name), exist_ok=True) # checks if directory exists. If not, create it.
 
         with open(file_name + '.s1p','w') as f:
             f.write(device_line)
