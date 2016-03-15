@@ -1,8 +1,8 @@
 #-----------------------------------------------------------------------------
-# Title      : Rohde & Schwarz SMA100A Signal Generator Class
+# Title      : Rohde & Schwarz SMA100A & SMB100A Signal Generator Class
 # Project    :
 #-----------------------------------------------------------------------------
-# File       : rs_sma100a.py
+# File       : rs_smx100a.py
 # Author     : Vitor Finotti Ferreira  <vfinotti@finotti-Inspiron-7520>
 # Company    : Brazilian Synchrotron Light Laboratory, LNLS/CNPEM
 # Created    : 2016-02-23
@@ -12,8 +12,8 @@
 #-----------------------------------------------------------------------------
 # Description:
 #
-# Defines specific class for Rohde & Schwarz SMA100A Signal Generator using
-# VXI-11 protocol with PyVisa and PyVisa-py
+# Defines specific class for Rohde & Schwarz SMA100A & SMB100A Signal
+# Generator using VXI-11 protocol with PyVisa and PyVisa-py
 #-----------------------------------------------------------------------------
 # Copyright (c) 2016 Brazilian Synchrotron Light Laboratory, LNLS/CNPEM
 #
@@ -43,8 +43,9 @@ import numpy as np
 # Time to wait after sending an instruction
 SLEEP_TIME = 2.0
 
-class RSSMA100A:
-    """Class used to send commands and acquire data from the Rohde & Schwarz SMA100A Signal Generator.
+class RSSMX100A:
+    """Class used to send commands and acquire data from the Rohde & Schwarz SMA100A & SMB100A
+    Signal Generator.
     """
 
     def __init__(self, ip):
