@@ -96,8 +96,10 @@ class AgilentE5061B:
 
     def get_s11_data(self):
         """Get the S11 trace data, returning a sequence of floating point numbers."""
+
         self.vna_socket.write(":CALC1:PAR1:DEF S11")
         time.sleep(SLEEP_TIME)
+
         s11_data = self.vna_socket.query(":CALC1:DATA:FDAT?")
         s11_data = s11_data[:len(s11_data) - 1].split(",")
         s11_data = s11_data[::2]
