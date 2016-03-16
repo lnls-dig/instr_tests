@@ -116,6 +116,11 @@ class RSSMX100A_visa:
         self.sig_gen_socket.write(':OUTP:STAT ON')
         return
 
+    def set_clk_syn(self, state, freq):
+        """ Set the Clock Synthesis"""
+        self.sig_gen_socket.write('CSYN:STAT ' + srt(state))
+        self.sig_gen_socket.write('CSYN:FREQ ' + srt(freq))
+        return
 
     #def close_connection(self):
     #    """Close the socket connection to the instrument."""
