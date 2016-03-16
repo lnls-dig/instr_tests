@@ -15,9 +15,10 @@ For now, the devices under implementation are:
 
 ## Requirements
 
-The classes need PyVisa >= 1.8 and PyVisa-py >= 0.2 to work properly.The Scikit-RF
-package (>=0.15.1) is also used, and all dependences can be resolved using the
-following command:
+The classes need PyVisa and PyVisa-py to communicate with the
+devices using Visa protocol and PyEpics to communicate using the EPICS control system.
+The Scikit-RF package is also used, and all dependences can be resolved using the following
+command:
 
 
 ```
