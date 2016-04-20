@@ -173,48 +173,43 @@ class RSSMX100A_epics:
     def set_frequency(self, freq):
         """set the frequency value"""
 #        self.sig_gen_socket.write(":SENS:FREQ " + str(freq))
+        epics.caput(self.sig_gen_idn + ":GENERAL:Freq", freq)
 #        time.sleep(SLEEP_TIME)
         return
 
     def set_lfo(self, freq):
         """set the low frequency output"""
 #        self.sig_gen_socket.write(':LFO:FREQ ' + str(freq))
+        epics.caput(self.sig_gen_idn + "",)
 #        self.sig_gen_socket.write(':LFO:FREQ:MODE FIXED')
 #        self.sig_gen_socket.write(':LFO:STAT ON')
         return
 
     def set_am(self, stat):
         """set the amplitude modulation output"""
-#        if stat != 0 and stat != 1 and stat != 'ON' and stat != 'OFF':
-#            print('State should be 1, 0, \'ON\' or \'OFF\'')
-#            exit()
 #        self.sig_gen_socket.write(':AM:STAT ' + str(stat))
-        epics.caput(self.sig_gen_idn + ':MOD:AMStat', stat)
+        epics.caput(self.sig_gen_idn + ':MOD:AMState', stat)
 #        self.sig_gen_socket.write(':AM:SOUR INT')
+        epics.caput(self.sig_gen_idn + ":MOD:AMSource", 0)
 #        self.sig_gen_socket.write(':MOD:STAT ON')
-        time.sleep(SLEEP_TIME)
         return
 
     def set_fm(self, stat):
-#        """set the frequency modulation output"""
-#        if stat != 0 and stat != 1 and stat != 'ON' and stat != 'OFF':
-#            print('State should be 1, 0, \'ON\' or \'OFF\'')
-#            exit()
-#        self.sig_gen_socket.write(':FM:STAT ' + str(stat))
-        epics.caput(self.sig_gen_idn + ':MOD:FMStat', stat)
+        """set the frequency modulation output"""
+        epics.caput(self.sig_gen_idn + ':MOD:FMState', stat)
 #        self.sig_gen_socket.write(':FM:SOUR INT')
+        epics.caput(self.sig_gen_idn + ':MOD:FMSource', 0)
 #        self.sig_gen_socket.write(':MOD:STAT ON')
-        time.sleep(SLEEP_TIME)
+#        time.sleep(SLEEP_TIME)
         return
 
     def set_rf(self, freq, level):
         """set the RF output"""
 #        self.sig_gen_socket.write(':FREQ ' + str(freq))
-        epics.caput(self.sig_gen_idn + ':STATUS:Freq', freq)
+        epics.caput(self.sig_gen_idn + ':GENERAL:Freq', freq)
 #        self.sig_gen_socket.write(':POW '+ str(level))
 #        self.sig_gen_socket.write(':FREQ:MODE FIXED')
 #        self.sig_gen_socket.write(':OUTP:STAT ON')
-        epics.caput(self.sig_gen_idn + ':STATUS:Level', level)
-        epics.caput(self.sig_gen_idn + ':STATUS:RF', 1)
-        time.sleep(SLEEP_TIME)
+        epics.caput(self.sig_gen_idn + ':GENERAL:Level', level)
+        epics.caput(self.sig_gen_idn + ':GENERAL:RF', 1)
         return
