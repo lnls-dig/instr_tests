@@ -100,4 +100,4 @@ class AFC_v3_1_epics:
         if channel.upper() != 'A' and channel.upper() != 'B' and channel.upper() != 'C' and channel.upper() != 'D':
             print('Channel should be A, B, C or D')
             exit()
-        data = caget(afc_idn + ':ADC_'+str(channel.upper())+':ArrayData')[:num_samples] # get only "num_samples" samples
+        return epics.caget(self.bpm_idn + ':ADC_'+str(channel.upper())+':ArrayData')[:num_samples] # get only "num_samples" samples
