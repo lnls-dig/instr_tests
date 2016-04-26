@@ -1,7 +1,8 @@
 ## Import all module names for coherent reference of namespace
 
-from . import rs_smx100a
+from . import afc_v3_1
+
 
 # Import contents into current namespace for ease of calling
 
-from .rs_smx100a import *
+from .afc_v3_1 import *

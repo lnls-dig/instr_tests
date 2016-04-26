@@ -11,22 +11,26 @@ For now, the devices under implementation are:
 
 - Agilent (Keysight) E5061B Network Analyzer
 - Rohde & Schwarz SMA100A Signal Generator
+- Rohde & Schwarz SMB100A Signal Generator
 
 ## Requirements
 
-The classes need PyVisa >= 1.8 and PyVisa-py >= 0.2 to work properly. They
-can be installed using the following commands:
+The classes need PyVisa and PyVisa-py to communicate with the
+devices using Visa protocol and PyEpics to communicate using the EPICS control system.
+The Scikit-RF package is also used, and all dependences can be resolved using the following
+command:
 
 
 ```
-$ pip3 install pyvisa
-$ pip3 install pyvisa-py
+$ pip3 install -r requirements.txt
 ```
 
-The Scikit-RF package (>=0.15.1) is also used, being instaled with the following command:
+## Installation
+
+The package can be installed using the setup.py file with the following command:
 
 ```
-$ pip3 install scikit-rf
+$ python3 setup.py install
 ```
 
 ## Documentation
