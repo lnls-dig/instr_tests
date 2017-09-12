@@ -26,6 +26,12 @@ import datetime
 import sys
 import os
 
+# Save path for tdr file
+TEST_PATH = '/media/button_tdr'
+
+# Save path for button list per day
+DAY_LIST_PATH = '/media/button_groups'
+
 # check input arguments
 argc = len(sys.argv)
 
@@ -37,7 +43,10 @@ elif argc > 2:
 	sys.exit()
 
 # filename
-filename = sys.argv[1]+'_'+str(datetime.date.today())
+filename = sys.argv[1]
+
+# today's date
+today = str(datetime.date.today())
 
 # connection
 if 'rm' in globals():
@@ -51,9 +60,7 @@ ip = "10.0.18.63"
 
 # open connection
 wbo_socket = rm.open_resource('TCPIP::'+ip+'::inst0::INSTR')
-
-# save folder
-TEST_PATH = '/media/button_tdr'
+print 'Connected'
 
 #if not os.access(TEST_PATH, os.F_OK):	# create directory if it does not exit
 #	os.makedirs(TEST_PATH)
@@ -66,6 +73,11 @@ with open(TEST_PATH+'/'+filename, 'w') as f:
 	data = wbo_socket.query(':DISK:TFILe? "D:\\User Files\\Waveforms\\'+filename+'.txt"')
 
 	f.write(data)
+
+# Append button name to today's list
+with open(DAY_LIST_PATH+'/'+today, 'a') as group:
+
+	group.write(filename+'\n')
 
 # read last error message
 print(wbo_socket.query(":SYSTem:ERRor? STRING"))
