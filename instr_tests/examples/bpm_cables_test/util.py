@@ -38,37 +38,46 @@ def visual_inspection(file_path, filename):
 
 	print('\n************** Visual Inspection **************\n')
 
-	# ask user to provide crimping/robustness/thermo-shrinkable quality
-	options = ['Excellent','Good','Bad']
-	choice = user_choice(options, 'Evaluate quality of crimping / robustness / thermo-shrinkable:', confirm=True)
+	print('1- Press <ENTER> to continue')
+	print('(Enter "skip" to skip measurement)')
+	cmd = raw_input()
+	cmd = cmd.replace("\n","").lower()
 
-	phys_quality = options[choice]	# physical quality
+	if cmd == 'skip':
+		print("\n[Inspection skipped]")
+	else:
+	
+		# ask user to provide crimping/robustness/thermo-shrinkable quality
+		options = ['Excellent','Good','Bad']
+		choice = user_choice(options, 'Evaluate quality of crimping / robustness / thermo-shrinkable:', confirm=True)
 
-	# ask user to provide identification quality
-	options = ['Excellent','Good','Bad']
-	choice = user_choice(options, 'Evaluate identification quality:', confirm=True)
+		phys_quality = options[choice]	# physical quality
 
-	ident_quality = options[choice]	# identification quality
+		# ask user to provide identification quality
+		options = ['Excellent','Good','Bad']
+		choice = user_choice(options, 'Evaluate identification quality:', confirm=True)
 
-	# ask user to enter observation
-	observ = ''
-	valid = 0
-	while valid != 1:
-		observ = raw_input('Enter observation: ')
-		print('Confirm observation ['+observ+'] ? (y/n) ')
-		while valid != 1:
-			conf = raw_input()
-			conf = conf.lower()
-			if conf == 'y' or conf == 'yes' or conf == 'n' or conf == 'no':
-				valid = 1
+		ident_quality = options[choice]	# identification quality
+
+		# ask user to enter observation
+		observ = ''
 		valid = 0
-		if conf == 'y' or conf == 'yes':
-			valid = 1
+		while valid != 1:
+			observ = raw_input('Enter observation: ')
+			print('Confirm observation ['+observ+'] ? (y/n) ')
+			while valid != 1:
+				conf = raw_input()
+				conf = conf.lower()
+				if conf == 'y' or conf == 'yes' or conf == 'n' or conf == 'no':
+					valid = 1
+			valid = 0
+			if conf == 'y' or conf == 'yes':
+				valid = 1
 
-	# save inspection data
-	data_pairs = [['Physical Quality', phys_quality], ['Identification Quality', ident_quality], ['Observation', observ]]
+		# save inspection data
+		data_pairs = [['Physical Quality', phys_quality], ['Identification Quality', ident_quality], ['Observation', observ]]
 
-	save_statistics(file_path+'/'+'inspection_'+filename+'.txt', data_pairs, append=False)
+		save_statistics(file_path+'/'+'inspection_'+filename+'.txt', data_pairs, append=False)
 """
 Name:
 		save_statistics
