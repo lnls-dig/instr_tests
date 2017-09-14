@@ -1,6 +1,6 @@
 ########################### Run in python 3 ###########################################
 #
-#	Device test script using Agilent E5061B Network Analizer 
+#	BPM cable test script using Agilent E5061B Network Analizer 
 #	and DCA-X 86100D Wide-Bandwidth Oscilloscope
 #
 #######################################################################################
