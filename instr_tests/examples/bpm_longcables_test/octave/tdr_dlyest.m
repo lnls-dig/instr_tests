@@ -1,4 +1,4 @@
-function dly = tdr_dlyest(data, arg2)
+function [dly, deriv] = tdr_dlyest(data, arg2)
 
 if isscalar(arg2)
     n = arg2;
@@ -10,5 +10,5 @@ end
  
 data_smo = filter(fircoeff, 1, data);
 data_smo = data_smo(n:end, :);
-[~,dly] = max(diff(data_smo));
+[deriv,dly] = max(diff(data_smo));
 dly = dly-1;
