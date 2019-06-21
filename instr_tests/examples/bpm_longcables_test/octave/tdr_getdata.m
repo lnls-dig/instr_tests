@@ -1,8 +1,7 @@
-function data = tdr_getwvf(fid, tdropt, ch)
+function data = tdr_getdata(fid, tdropt, ch)
 
 data = [];
 for i=1:length(ch)
-    tic
     % Select trace
     vxi11_write(fid, sprintf(':WAV:SOUR CHAN%d', ch(i)))
     pause(tdropt.sleep_write);
@@ -13,5 +12,4 @@ for i=1:length(ch)
     
     data_temp = textscan(char(vxi11_read(fid, tdropt.nbytes2read)), '%f,');
     data = [data data_temp{1}];        
-    toc
 end

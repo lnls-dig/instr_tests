@@ -17,7 +17,7 @@ pause(1)
 for i=1
     swbox_setsw('10.15.0.135', 'A', i);
     pause(2);
-    data = tdr_getwvf(fid, tdropt, ch);
+    data = tdr_getdata(fid, tdropt, ch);
     t = tdr_gettime(fid, tdropt, ch);
     cable_dly(i) = t(round(tdr_dlyest(data, navg)));
 end
@@ -28,7 +28,7 @@ pause(1)
 for i=1
     swbox_setsw('10.15.0.135', 'A', i);
     pause(2);
-    data = tdr_getwvf(fid, tdropt, ch);
+    data = tdr_getdata(fid, tdropt, ch);
     t = tdr_gettime(fid, tdropt);
     cable_dly2(i) = t(round(tdr_dlyest(data, navg)));
 end
