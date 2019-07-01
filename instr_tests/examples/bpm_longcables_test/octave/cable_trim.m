@@ -19,7 +19,8 @@ tdropt = tdr_options;
 refplane = tdr_getrefplane(fid, tdropt, tdr_source);
 
 % Retrive time array
-t = tdr_gettime(fid, tdropt);
+t_orig = tdr_gettime(fid, tdropt);
+t = t_orig-refplane;
 
 % First length measurement for all cables
 dly_idx = zeros(4,1);
@@ -32,7 +33,7 @@ for i=1:4
     data = [data tdr_getdata(fid, tdropt, tdr_source)];
 end
 [dly_idx, deriv] = tdr_dlyest(data, dlyest_navg);
-[hplot, ref_dly] = tdr_distest_plot(t-refplane, data, dly_idx, cable_diel, npts_plot, clr);
+[hplot, ref_dly] = tdr_distest_plot(t, data, dly_idx, cable_diel, npts_plot, clr);
 
 % Update each length measurement at user's request
 last_ch = i;
@@ -61,7 +62,7 @@ while true
     pause(2);
     data(:,i) = tdr_getdata(fid, tdropt, tdr_source);
     [dly_idx, deriv] = tdr_dlyest(data, dlyest_navg);
-    tdr_distest_plot(t-refplane, data, dly_idx, cable_diel, npts_plot, [], 'update', hplot);
+    tdr_distest_plot(t, data, dly_idx, cable_diel, npts_plot, [], 'update', hplot);
     last_ch = i;
 end
 
