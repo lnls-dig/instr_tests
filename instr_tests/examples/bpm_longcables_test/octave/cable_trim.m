@@ -45,6 +45,7 @@ for i=1:4
 end
 [dly_idx, deriv] = tdr_dlyest(data, dlyest_navg);
 hplot = tdr_distest_plot(t, data, dly_idx, cable_diel, npts_plot, clr);
+tdr_distest_print(t(dly_idx), cable_diel);
 
 % Update each length measurement at user's request
 last_ch = i;
@@ -75,6 +76,7 @@ while true
     
     [dly_idx, deriv] = tdr_dlyest(data, dlyest_navg);
     tdr_distest_plot(t, data, dly_idx, cable_diel, npts_plot, [], 'update', hplot);
+    tdr_distest_print(t(dly_idx), cable_diel);
     last_ch = i;
 end
 
