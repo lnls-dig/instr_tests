@@ -61,7 +61,7 @@ while true
     pause(2);
     data(:,i) = tdr_getdata(fid, tdropt, tdr_source);
     [dly_idx, deriv] = tdr_dlyest(data, dlyest_navg);
-    tdr_distest_plot_update(hplot, t-refplane, data, dly_idx, cable_diel, npts_plot, i);
+    tdr_distest_plot(t-refplane, data, dly_idx, cable_diel, npts_plot, [], 'update', hplot);
     last_ch = i;
 end
 
