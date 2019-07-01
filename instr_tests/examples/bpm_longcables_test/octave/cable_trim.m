@@ -1,5 +1,5 @@
 tdr_ip = '10.15.0.164';
-swbox_ip = '10.15.0.135';
+swbox_ip = '10.15.0.103';
 
 cable_diel = 1.56;
 tdr_source = 'RESP3';
@@ -16,7 +16,7 @@ fid = vxi11(tdr_ip);
 tdropt = tdr_options;
 
 % Retrieve TDR reference plane in seconds
-refplane =  tdr_getrefplane(fid, tdropt, tdr_source);
+refplane = tdr_getrefplane(fid, tdropt, tdr_source);
 
 % Retrive time array
 t = tdr_gettime(fid, tdropt);
@@ -35,7 +35,7 @@ end
 [hplot, ref_dly] = tdr_distest_plot(t-refplane, data, dly_idx, cable_diel, npts_plot, clr);
 
 % Update each length measurement at user's request
-last_ch = 1;
+last_ch = i;
 while true
     r = input(sprintf('Choose cable measurement to be updated (1/2/3/4) [default = %d (last value)] and press <Enter>. Press ''q'' + <Enter> to quit): \n', last_ch),'s');
     switch r
