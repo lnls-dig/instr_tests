@@ -5,6 +5,7 @@ cable_diel = 1.56;
 tdr_source = 'RESP3';
 dlyest_navg = 20;
 npts_plot = 20;
+upsample_factor = 10;
 clr = [ ...
     0.04 0.58 0.05;
     0.82 0.70 0.10;
@@ -33,6 +34,7 @@ refplane = tdr_getrefplane(fid, tdropt, tdr_source);
 % Retrive time array
 t_orig = tdr_gettime(fid, tdropt);
 t = t_orig-refplane;
+dt = t(2)-t(1);
 
 % First length measurement for all cables
 data = [];
@@ -43,9 +45,10 @@ for i=1:4
     data = [data tdr_getdata(fid, tdropt, tdr_source)];
     fprintf('done.\n');
 end
-[dly_idx, deriv] = tdr_dlyest(data, dlyest_navg);
-hplot = tdr_distest_plot(t, data, dly_idx, cable_diel, npts_plot, clr);
-tdr_distest_print(t(dly_idx), cable_diel);
+[data2, t2] = upsample(data, upsample_factor, 3, dt, t(1));
+[dly_idx, deriv] = tdr_dlyest(data2, dlyest_navg);
+hplot = tdr_distest_plot(t2, data2, dly_idx, cable_diel, npts_plot, clr);
+tdr_distest_print(t2(dly_idx), cable_diel);
 
 % Update each length measurement at user's request
 last_ch = i;
@@ -74,9 +77,10 @@ while true
     data(:,i) = tdr_getdata(fid, tdropt, tdr_source);
     fprintf('done.\n');
     
-    [dly_idx, deriv] = tdr_dlyest(data, dlyest_navg);
-    tdr_distest_plot(t, data, dly_idx, cable_diel, npts_plot, [], 'update', hplot);
-    tdr_distest_print(t(dly_idx), cable_diel);
+    data2(:,i) = upsample(data(:,i), upsample_factor, 3, dt, t(1));
+    [dly_idx, deriv] = tdr_dlyest(data2, dlyest_navg);
+    tdr_distest_plot(t2, data2, dly_idx, cable_diel, npts_plot, [], 'update', hplot);
+    tdr_distest_print(t2(dly_idx), cable_diel);
     last_ch = i;
 end
 
@@ -90,6 +94,8 @@ fprintf('Saving results to file ''%s''...\n\n', filename);
 result.refplane = refplane;
 result.t = t';
 result.data = data';
+result.t_upsampled = t2';
+result.data_upsampled = data2';
 result.cable_dielectric = cable_diel;
 
 opt.FileName = filename;
