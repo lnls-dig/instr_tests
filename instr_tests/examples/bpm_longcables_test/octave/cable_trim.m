@@ -46,7 +46,7 @@ for i=1:4
     data = [data tdr_getdata(fid, tdropt, tdr_source)];
     fprintf('done.\n');
 end
-dly = tdr_dlyest(data, t, dlyest_method, dlyest_args);
+dly = tdr_dlyest(data, t, dlyest_method, dlyest_args{:});
 hplot = tdr_distest_plot(t, data, dly, cable_diel, npts_plot, clr);
 tdr_distest_print(dly, cable_diel);
 
@@ -77,7 +77,7 @@ while true
     data(:,i) = tdr_getdata(fid, tdropt, tdr_source);
     fprintf('done.\n');
     
-    dly = tdr_dlyest(data, t, dlyest_method, dlyest_args);
+    dly = tdr_dlyest(data, t, dlyest_method, dlyest_args{:});
     tdr_distest_plot(t, data, dly, cable_diel, npts_plot, [], 'update', hplot);
     tdr_distest_print(dly, cable_diel);
     last_ch = i;
