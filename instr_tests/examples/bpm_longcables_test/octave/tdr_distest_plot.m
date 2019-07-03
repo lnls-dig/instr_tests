@@ -22,11 +22,11 @@ if strcmp(call_type, 'first')
     hplot = zeros(size(data,2), 3);
     figure;
     for i=1:size(data,2)
-        hplot(i,1) = plot(dist(dly_idx(i) + idx), data(dly_idx(i) + idx,i), 'Color', clr(i,:), 'LineWidth', 2);
+        hplot(i,1) = plot(dist(dly_idx(i) + idx), data(dly_idx(i) + idx,i), 'Color', clr(mod(i-1, size(clr,1))+1,:), 'LineWidth', 2);
         hold all
     end
     for i=1:size(data,2)
-        hplot(i,2) = plot(dist_cable(i), ampl_dist_cable(i), 'o', 'Color', clr(i,:), 'LineWidth', 3);
+        hplot(i,2) = plot(dist_cable(i), ampl_dist_cable(i), 'o', 'Color', clr(mod(i-1, size(clr,1))+1,:), 'LineWidth', 3);
     end
     ylabel('Reflection [%]', 'FontSize', 16);
     grid on
