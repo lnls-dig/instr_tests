@@ -1,23 +1,12 @@
-function [dly, deriv] = tdr_dlyest(data, arg2, nderiv)
+function dly = tdr_dlyest(data, t, fc)
 
-if isscalar(arg2)
-    n = arg2;
-    fircoeff = ones(1,n)/n;
-else
-    fircoeff = arg2;
-    n = (length(fircoeff)+1)/2+1;
-end
-
-if nargin < 3 || isempty(nderiv)
-    nderiv = 1;
-end
-
-data_smo = filter(fircoeff, 1, data);
-data_smo = data_smo(n:end, :);
-
-if nderiv == 2
-    [deriv,dly] = max(diff(diff(data_smo)));
-else
-    [deriv,dly] = max(diff(data_smo));
-    dly = dly-1;
+npts = size(data,1);
+Ts = t(2)-t(1);
+Y = fft(diff(data));
+f = (0:npts-1)'/npts/Ts;
+idx = f <= fc;
+ph = unwrap(angle(Y(idx,:)));
+dly = zeros(1, size(data,2));
+for i=1:size(ph,2)
+    dly(i) = -2*pi*f(idx)\ph(:,i);
 end
