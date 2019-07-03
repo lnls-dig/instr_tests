@@ -37,50 +37,48 @@ t_orig = tdr_gettime(fid, tdropt);
 t = t_orig-refplane;
 dt = t(2)-t(1);
 
-% First length measurement for all cables
-data = [];
-for i=1:4
-    fprintf('Measuring cable %d...', i);
-    swbox_setsw(swbox_ip, 'A', i);
-    pause(2);
-    data = [data tdr_getdata(fid, tdropt, tdr_source)];
-    fprintf('done.\n');
-end
-dly = tdr_dlyest(data, t, dlyest_method, dlyest_args{:});
-hplot = tdr_distest_plot(t, data, dly, cable_diel, npts_plot, clr);
-tdr_distest_print(dly, cable_diel);
+% Pre-allocate data array
+data = zeros(length(t), 4);
 
 % Update each length measurement at user's request
-last_ch = i;
+r = 'a';
 while true
-    r = input(sprintf('Choose cable measurement to be updated (1/2/3/4) or ''q'' to quit [%d]: ', last_ch),'s');
     switch r
         case 'q'
             break
+        case 'a'
+            ch = 1:4;
         otherwise
             if isempty(r)
-                i = last_ch;
+                ch = last_ch;
             else
                 rnum = str2double(r);
                 if rnum >= 1 && rnum <= 4 && mod(rnum,1) == 0
-                    i = rnum;
+                    ch = rnum;
                 else
-                    fprintf('Wrong option. Choose among 1/2/3/4/q.\n');
+                    fprintf('Wrong option. Choose among 1/2/3/4/a/q.\n');
                     continue
                 end
             end
     end
     
-    fprintf('Measuring cable %d... ', i);
-    swbox_setsw(swbox_ip, 'A', i);
-    pause(2);
-    data(:,i) = tdr_getdata(fid, tdropt, tdr_source);
-    fprintf('done.\n');
+    for i=ch
+        fprintf('Measuring cable %d... ', i);
+        swbox_setsw(swbox_ip, 'A', i);
+        pause(2);
+        data(:,i) = tdr_getdata(fid, tdropt, tdr_source);
+        fprintf('done.\n');
+    end
     
     dly = tdr_dlyest(data, t, dlyest_method, dlyest_args{:});
-    tdr_distest_plot(t, data, dly, cable_diel, npts_plot, [], 'update', hplot);
+    if exist('hplot', 'var')
+        tdr_distest_plot(t, data, dly, cable_diel, npts_plot, [], 'update', hplot);
+    else
+        hplot = tdr_distest_plot(t, data, dly, cable_diel, npts_plot, clr);
+    end
     tdr_distest_print(dly, cable_diel);
-    last_ch = i;
+    last_ch = ch(end);
+    r = input(sprintf('Choose cable measurement to be updated (1/2/3/4) or ''a'' to update all or ''q'' to quit and results data [%d]: ', last_ch),'s');
 end
 
 vxi11_close(fid);
