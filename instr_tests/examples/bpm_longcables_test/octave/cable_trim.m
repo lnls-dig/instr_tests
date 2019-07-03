@@ -85,11 +85,15 @@ end
 
 vxi11_close(fid);
 
+cable_length = tdr_time2dist(dly, cable_diel);
+
 % Save results to JSON file
 filename = sprintf('cable_trim_%s_%s.json', cable_name, datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
 
 fprintf('Saving results to file ''%s''...\n\n', filename);
 
+result.cable_name = cable_name;
+result.cable_length = cable_length';
 result.refplane = refplane;
 result.t = t';
 result.data = data';
