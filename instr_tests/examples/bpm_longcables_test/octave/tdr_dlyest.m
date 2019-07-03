@@ -7,7 +7,10 @@ switch method
             fc = round(0.01*Fs);
         else
             fc = varargin{1};
+            ndecim = varargin{2};
         end
+        [data, t] = downsample(data, ndecim, 2, 1/Fs, t(1));
+        Fs = 1/(t(2)-t(1));
         npts = size(data,1)-1; % The data arrays will be shortened by one sample due to diff
         f = (0:npts-1)'/npts*Fs;
         Y = fft(diff(data));
@@ -22,10 +25,14 @@ switch method
         if isempty(varargin)
             n = 1;
             nderiv = 1;
+            ninterp = 1;
         else
             n = varargin{1};
             nderiv = varargin{2};
+            ninterp = varargin{3};
         end
+        Fs = 1/(t(2)-t(1));
+        [data, t] = upsample(data, ninterp, ninterp, 1/Fs, t(1));
         fircoeff = ones(1,n)/n;
         data_smo = filter(fircoeff, 1, data);
         data_smo = data_smo(n:end, :);

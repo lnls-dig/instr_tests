@@ -24,11 +24,11 @@ for i=1:nsec-1
 end
 
 % Filter
-y = filter(coeff,1, y);
+y = filter(coeff, 1, y);
 
 % Build time array
 dly = (n-1)*(nsec/2)*Ts/n;
-t = (0:npts2-1)*Ts/n + t0 - dly;
+t = (0:npts2-1)'*Ts/n + t0 - dly;
 
 % Crop data
 ncrop = round((n-1)*nsec);

@@ -6,7 +6,7 @@ tdr_source = 'RESP3';
 npts_plot = 1000;
 upsample_factor = 10;
 %dlyest_method =  'deriv'; dlyest_args = {20,1};
-dlyest_method =  'fft'; dlyest_args = {75e6};
+dlyest_method =  'fft'; dlyest_args = {75e6, 2};
 clr = [ ...
     0.04 0.58 0.05;
     0.82 0.70 0.10;
