@@ -3,9 +3,10 @@ swbox_ip = '10.15.0.103';
 
 cable_diel = 1.56;
 tdr_source = 'RESP3';
-dlyest_fc = 75e6;
 npts_plot = 1000;
 upsample_factor = 10;
+%dlyest_method =  'deriv'; dlyest_args = {20,1};
+dlyest_method =  'fft'; dlyest_args = {75e6};
 clr = [ ...
     0.04 0.58 0.05;
     0.82 0.70 0.10;
@@ -45,7 +46,7 @@ for i=1:4
     data = [data tdr_getdata(fid, tdropt, tdr_source)];
     fprintf('done.\n');
 end
-dly = tdr_dlyest(data, t, dlyest_fc);
+dly = tdr_dlyest(data, t, dlyest_method, dlyest_args);
 hplot = tdr_distest_plot(t, data, dly, cable_diel, npts_plot, clr);
 tdr_distest_print(dly, cable_diel);
 
@@ -76,7 +77,7 @@ while true
     data(:,i) = tdr_getdata(fid, tdropt, tdr_source);
     fprintf('done.\n');
     
-    dly = tdr_dlyest(data, t, dlyest_fc);
+    dly = tdr_dlyest(data, t, dlyest_method, dlyest_args);
     tdr_distest_plot(t, data, dly, cable_diel, npts_plot, [], 'update', hplot);
     tdr_distest_print(dly, cable_diel);
     last_ch = i;
