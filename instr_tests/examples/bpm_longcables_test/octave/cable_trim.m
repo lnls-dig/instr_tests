@@ -72,6 +72,18 @@ while true
     
     dly = tdr_dlyest(data, t, dlyest_method, dlyest_args{:});
     if exist('hplot', 'var')
+        try
+            for i=1:length(hplot)
+                get(hplot(i), 'Children');
+            end
+            valid_hplot = 1;
+        catch
+            valid_hplot = 0;
+        end
+    else
+        valid_hplot = 0;
+    end
+    if valid_hplot
         tdr_distest_plot(t, data, dly, cable_diel, npts_plot, [], 'update', hplot);
     else
         hplot = tdr_distest_plot(t, data, dly, cable_diel, npts_plot, clr);
