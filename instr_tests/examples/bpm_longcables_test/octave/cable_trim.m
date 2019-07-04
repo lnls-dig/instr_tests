@@ -88,9 +88,10 @@ while true
     else
         hplot = tdr_distest_plot(t, data, dly, cable_diel, npts_plot, clr);
     end
+    title(cable_name);
     tdr_distest_print(dly, cable_diel);
     last_ch = ch(end);
-    r = input(sprintf('Choose cable measurement to be updated (1/2/3/4) or ''a'' to update all or ''q'' to quit and results data [%d]: ', last_ch),'s');
+    r = input(sprintf('Choose cable measurement to be updated (1/2/3/4) or ''a'' to update all or ''q'' to quit and save results [%d]: ', last_ch),'s');
 end
 
 vxi11_close(fid);
