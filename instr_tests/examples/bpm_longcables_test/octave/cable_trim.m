@@ -43,6 +43,7 @@ data = zeros(length(t), 4);
 % Update each length measurement at user's request
 r = 'a';
 while true
+    valid_option = 1;
     switch r
         case 'q'
             break
@@ -57,42 +58,44 @@ while true
                     ch = rnum;
                 else
                     fprintf('Wrong option. Choose among 1/2/3/4/a/q.\n');
-                    continue
+                    valid_option 0;
                 end
             end
     end
     
-    for i=ch
-        fprintf('Measuring cable %d... ', i);
-        swbox_setsw(swbox_ip, 'A', i);
-        pause(2);
-        data(:,i) = tdr_getdata(fid, tdropt, tdr_source);
-        fprintf('done.\n');
-    end
-    
-	  dly_guess = tdr_dlyest(data, t, 'deriv', dlyest_args_deriv{:});
-    dlyest_args_edge{6} = dly_guess;
-    dly = tdr_dlyest(data, t, 'edge', dlyest_args_edge{:});
-    if exist('hplot', 'var')
-        try
-            for i=1:length(hplot)
-                get(hplot(i), 'Children');
+    if valid_option
+        for i=ch
+            fprintf('Measuring cable %d... ', i);
+            swbox_setsw(swbox_ip, 'A', i);
+            pause(2);
+            data(:,i) = tdr_getdata(fid, tdropt, tdr_source);
+            fprintf('done.\n');
+        end
+        
+        dly_guess = tdr_dlyest(data, t, 'deriv', dlyest_args_deriv{:});
+        dlyest_args_edge{6} = dly_guess;
+        dly = tdr_dlyest(data, t, 'edge', dlyest_args_edge{:});
+        if exist('hplot', 'var')
+            try
+                for i=1:length(hplot)
+                    get(hplot(i), 'Children');
+                end
+                valid_hplot = 1;
+            catch
+                valid_hplot = 0;
             end
-            valid_hplot = 1;
-        catch
+        else
             valid_hplot = 0;
         end
-    else
-        valid_hplot = 0;
+        if valid_hplot
+            tdr_distest_plot(t, data, dly, cable_diel, npts_plot, [], 'update', hplot);
+        else
+            hplot = tdr_distest_plot(t, data, dly, cable_diel, npts_plot, clr);
+        end
+        title(cable_name);
+        tdr_distest_print(dly, cable_diel);
+        last_ch = ch(end);
     end
-    if valid_hplot
-        tdr_distest_plot(t, data, dly, cable_diel, npts_plot, [], 'update', hplot);
-    else
-        hplot = tdr_distest_plot(t, data, dly, cable_diel, npts_plot, clr);
-    end
-    title(cable_name);
-    tdr_distest_print(dly, cable_diel);
-    last_ch = ch(end);
     r = input(sprintf('Choose cable measurement to be updated (1/2/3/4) or ''a'' to update all or ''q'' to quit and save results [%d]: ', last_ch),'s');
 end
 
