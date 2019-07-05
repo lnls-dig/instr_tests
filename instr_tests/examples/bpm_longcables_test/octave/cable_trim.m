@@ -5,8 +5,8 @@ cable_diel = 1.56;
 tdr_source = 'RESP3';
 npts_plot = 1000;
 upsample_factor = 10;
-%dlyest_method =  'deriv'; dlyest_args = {20,1};
-dlyest_method =  'fft'; dlyest_args = {75e6, 2};
+dlyest_args_deriv = {50, 1, 15};
+dlyest_args_edge = {30000, 15, 0.5, 0.01, 500, [0; 0; 0; 0]};
 clr = [ ...
     0.04 0.58 0.05;
     0.82 0.70 0.10;
@@ -70,7 +70,9 @@ while true
         fprintf('done.\n');
     end
     
-    dly = tdr_dlyest(data, t, dlyest_method, dlyest_args{:});
+	  dly_guess = tdr_dlyest(data, t, 'deriv', dlyest_args_deriv{:});
+    dlyest_args_edge{6} = dly_guess;
+    dly = tdr_dlyest(data, t, 'edge', dlyest_args_edge{:});
     if exist('hplot', 'var')
         try
             for i=1:length(hplot)
