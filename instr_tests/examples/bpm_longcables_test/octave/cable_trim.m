@@ -43,7 +43,7 @@ data = zeros(length(t), 4);
 % Update each length measurement at user's request
 r = 'a';
 while true
-    valid_option = 1;
+    valid_option = true;
     switch r
         case 'q'
             break
@@ -58,7 +58,7 @@ while true
                     ch = rnum;
                 else
                     fprintf('Wrong option. Choose among 1/2/3/4/a/q.\n');
-                    valid_option 0;
+                    valid_option = false;
                 end
             end
     end
