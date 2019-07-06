@@ -69,7 +69,7 @@ switch method
         for i=1:length(dly)
             aux = find(t <= dly_guess(i));
             dly_idx(i) = aux(end);
-            idx = dly_idx(i) - round(n/2) + (-ceil(n/5-1):floor(4*n/5));
+            idx = dly_idx(i) - round(ninterp/2) + (-ceil(n/5-1):floor(4*n/5));
             t_roi0 = t(idx(1));
             data_roi(:,i) = data(idx, i);
             data_roi(:,i) = data_roi(:,i) - mean(data_roi(1:nstable,i));
