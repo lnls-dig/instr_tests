@@ -30,7 +30,7 @@ end
 tdropt = tdr_options;
 
 % Retrieve TDR reference plane in seconds
-refplane = tdr_getrefplane(fid, tdropt, tdr_source);
+refplane = tdr_get(fid, tdropt, sprintf(':TDR:%s:RPL', tdr_source), 'double');
 
 % Retrive time array
 t_orig = tdr_gettime(fid, tdropt);
