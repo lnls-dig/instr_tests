@@ -13,6 +13,8 @@ clr = [ ...
     0.04 0.40 0.80;
     0    0    0
     ];
+nmeas = 5;
+tdr_meas = false;
 
 cable_name = input('Enter the cable name and continue [temp]: ','s');
 if isempty(cable_name)
@@ -36,6 +38,16 @@ refplane = tdr_get(fid, tdropt, sprintf(':TDR:%s:RPL', tdr_source), 'double');
 t_orig = tdr_gettime(fid, tdropt);
 t = t_orig-refplane;
 dt = t(2)-t(1);
+
+if tdr_meas
+    % Set default scale (full view)
+    tdr_set(fid, tdropt, ':TIM:RANG', t_orig(end)-t_orig(1));
+    tdr_set(fid, tdropt, ':TIM:POS', t_orig(1));
+    
+    % Pre-allocate arrays
+    dly2 = zeros(4,1);
+    dly2_std = zeros(4,1);
+end
 
 % Pre-allocate data array
 data = zeros(length(t), 4);
@@ -70,6 +82,29 @@ while true
             pause(2);
             data(:,i) = tdr_getdata(fid, tdropt, tdr_source);
             fprintf('done.\n');
+
+            if tdr_meas
+                tdr_set(fid, tdropt, ':TIM:RANG', t_orig(end)-t_orig(1));
+                tdr_set(fid, tdropt, ':TIM:POS', t_orig(1));
+                pause(0.5);
+                tedge(i) = tdr_get(fid, tdropt, sprintf(':MEASURE:TEDGE? LOW,+1,%s', tdr_source), 'double');
+                tdr_set(fid, tdropt, ':TIM:RANG', 50e-9);
+                tdr_set(fid, tdropt, ':TIM:POS', tedge(i) - 5e-9 + refplane);
+                pause(0.5);
+                
+                aux = zeros(nmeas,1);
+                for j=1:nmeas
+                    aux(j) = tdr_get(fid, tdropt, sprintf(':MEASURE:TEDGE? MIDD,+1,%s', tdr_source), 'double');
+                    pause(1);
+                end
+                dly2(i) = mean(aux);
+                dly2_std(i) = std(aux);
+            end
+        end
+
+        if tdr_meas
+            tdr_set(fid, tdropt, ':TIM:RANG', t_orig(end)-t_orig(1));
+            tdr_set(fid, tdropt, ':TIM:POS', t_orig(1));
         end
         
         dly_guess = tdr_dlyest(data, t, 'deriv', dlyest_args_deriv{:});
