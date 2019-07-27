@@ -1,12 +1,13 @@
-tdr_ip = '10.15.0.164';
-swbox_ip = '10.15.0.103';
+tdr_ip = '192.168.2.202';
+swbox_ip = '192.168.2.201';
+path_file = fullfile('~', 'cable_trim_data');
 
 cable_diel = 1.56;
 tdr_source = 'RESP3';
 npts_plot = 1000;
 upsample_factor = 10;
 dlyest_args_deriv = {50, 1, 15};
-dlyest_args_edge = {30000, 15, 0.5, 0.01, 500, [0; 0; 0; 0]};
+dlyest_args_edge = {30000, 15, 0.1, 0.01, 500, [0; 0; 0; 0]};
 clr = [ ...
     0.04 0.58 0.05;
     0.82 0.70 0.10;
@@ -79,7 +80,7 @@ while true
         for i=ch
             fprintf('Measuring cable %d... ', i);
             swbox_setsw(swbox_ip, 'A', i);
-            pause(2);
+            pause(10);
             data(:,i) = tdr_getdata(fid, tdropt, tdr_source);
             fprintf('done.\n');
 
@@ -122,6 +123,7 @@ while true
         else
             valid_hplot = 0;
         end
+        fprintf('\n\nCable %s\n', cable_name);
         if valid_hplot
             tdr_distest_plot(t, data, dly, cable_diel, npts_plot, [], 'update', hplot);
         else
@@ -134,12 +136,17 @@ while true
     r = input(sprintf('Choose cable measurement to be updated (1/2/3/4) or ''a'' to update all or ''q'' to quit and save results [%d]: ', last_ch),'s');
 end
 
-vxi11_close(fid);
-
+try
+    vxi11_close(fid);
+end
 cable_length = tdr_time2dist(dly, cable_diel);
 
 % Save results to JSON file
-filename = sprintf('cable_trim_%s_%s.json', cable_name, datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
+date_time = now;
+date_time_filename = datestr(date_time, 'yyyy-mm-dd_HH-MM-SS');
+date_json = datestr(date_time, 'yyyy/mm/dd');
+time_json = datestr(date_time, 'HH:MM:SS.FFF');
+filename = sprintf('cable_trim_%s_%s.json', cable_name, date_time_filename);
 
 fprintf('Saving results to file ''%s''...\n\n', filename);
 
@@ -149,6 +156,8 @@ result.refplane = refplane;
 result.t = t';
 result.data = data';
 result.cable_dielectric = cable_diel;
+result.date = date_json;
+result.time = time_json;
 
-opt.FileName = filename;
+opt.FileName = fullfile(path_file, filename);
 savejson('', result, opt);
