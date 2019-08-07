@@ -2,6 +2,7 @@ tdr_ip = '192.168.2.202';
 swbox_ip = '192.168.2.201';
 path_file = fullfile('~', 'cable_trim_data');
 
+ch_init = 1:4;
 cable_diel = 1.56;
 tdr_source = 'RESP3';
 npts_plot = 1000;
@@ -51,7 +52,7 @@ if tdr_meas
 end
 
 % Pre-allocate data array
-data = zeros(length(t), 4);
+data = zeros(length(t), length(ch_init));
 
 % Update each length measurement at user's request
 r = 'a';
@@ -61,7 +62,7 @@ while true
         case 'q'
             break
         case 'a'
-            ch = 1:4;
+            ch = ch_init;
         otherwise
             if isempty(r)
                 ch = last_ch;
