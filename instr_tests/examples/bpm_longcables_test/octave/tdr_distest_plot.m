@@ -20,7 +20,12 @@ end
 
 if strcmp(call_type, 'first')
     hplot = zeros(size(data,2), 3);
-    figure;
+    figure(1);
+    subplot(211)
+    plot(data(t>0,:));
+    subplot(212)
+    plot(diff(data(t>0,:)));
+    figure(2);
     for i=1:size(data,2)
         hplot(i,1) = plot(dist(dly_idx(i) + idx), data(dly_idx(i) + idx,i), 'Color', clr(mod(i-1, size(clr,1))+1,:), 'LineWidth', 2);
         hold all
