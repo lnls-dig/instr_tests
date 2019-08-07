@@ -1,4 +1,6 @@
-path_file = fullfile('~', 'repos_temp', 'instr_tests', 'instr_tests', 'examples', 'bpm_longcables_test', 'octave', 'rf_fullpath_data');
+function bpm_offset_test(bpm_name)
+
+path_file = fullfile('~', 'repos_temp', 'instr_tests', 'instr_tests', 'examples', 'bpm_longcables_test', 'octave', 'bpm_offset_data');
 
 clr_direct = [ ...
     0.04 0.58 0.05;
@@ -14,9 +16,15 @@ clr_inverted = [ ...
     0.25 0.25 0.25
     ];
 
-bpm_name = input('Enter the BPM name and continue [temp]: ','s');
-if isempty(bpm_name)
-    bpm_name = 'temp';
+    
+if nargin < 1
+    default_pass = false;
+    bpm_name = input('Enter the BPM name and continue [temp]: ','s');
+    if isempty(bpm_name)
+        bpm_name = 'temp';
+    end
+else
+    default_pass = true;
 end
 
 fprintf('Starting test of full RF channel (long cable + RFFE + medium cable + ADC)...\n');
@@ -28,9 +36,9 @@ else
     %bpm_name_ = [bpm_name(end-5:end) ':DI-BPM'];
 end
 
-pvs_ampl = buildpvnames(bpm_name_, {'AmplA-Mon', 'AmplB-Mon', 'AmplC-Mon', 'AmplD-Mon'});
+pvs_ampl = buildpvnames(bpm_name_, {'AmplA-Mon', 'AmplC-Mon', 'AmplB-Mon', 'AmplD-Mon'});
 pvs_rffe_sw = buildpvnames(bpm_name_, 'SwMode-Sel');
-
+pvs_rffe_att = buildpvnames(bpm_name_, 'RFFEAtt-SP');
 try
     h = mcaopen(pvs_ampl(1));
 catch
@@ -40,12 +48,12 @@ end
 data = zeros(40,4);
 
 mcaget(h);
-tstamp.init = datestr(mcatime(h), 'yyyy/mm/dd_HH:MM:SS.FFF');
+tstamp.init = datestr(mcatime(h), 'yyyy/mm/dd_HH:MM:SS');
 
 tstamp.cable_connect = {};
 
-for i=1:4
-    pass = false;
+for i=4:-1:1
+    pass = default_pass;
     cond = false(1,6);
     while ~pass
         fprintf('Connect cable  << %d >>  to the RF source...', i);
@@ -66,12 +74,12 @@ for i=1:4
         cond(4) = i == max_i;
         %aux = a2(i) > a1(i+1:end);
         %cond(5) = all(aux) || isempty(aux);    % FIXME: check if isempty is needed
-        cond(5) = all(a2(i)./a1(i+1:end) > 5);
-        cond(6) = all(a1(i)./a2(1:i-1) < 5);
+        cond(5) = all(a2(i)./a1(1:i-1) > 5);
+        cond(6) = all(a1(i)./a2(i+1:end) < 5);
         
         if all(cond)
             mcaget(h);
-            tstamp.cable_connect{i} = datestr(mcatime(h), 'yyyy/mm/dd_HH:MM:SS.FFF');
+            tstamp.cable_connect{i} = datestr(mcatime(h), 'yyyy/mm/dd_HH:MM:SS');
             pass = true;
             fprintf(' CONNECTED!\n');            
         else
@@ -80,18 +88,30 @@ for i=1:4
     end
 end
 
-input('Press <Enter> to start offset test: ','s');
+if nargin < 1
+    input('Press <Enter> to start offset test: ','s');
+end
+
+rffeatt_origstate = caget(pvs_rffe_att);
 rffesw_origstate = caget(pvs_rffe_sw);
-mcaget(h);
-tstamp.sw_direct = datestr(mcatime(h), 'yyyy/mm/dd_HH:MM:SS.FFF');
-caput(pvs_rffe_sw, 1);
-pause(5);
-mcaget(h);
-tstamp.sw_inverted = datestr(mcatime(h), 'yyyy/mm/dd_HH:MM:SS.FFF');
-caput(pvs_rffe_sw, 2);
-pause(5);
+
+rffe_att = [0:5:30];
+for i=1:length(rffe_att)
+    caput(pvs_rffe_att, rffe_att(i));
+    caput(pvs_rffe_sw, 1);
+    pause(0.3);
+    mcaget(h);
+    tstamp.sw_direct{i} = datestr(mcatime(h), 'yyyy/mm/dd_HH:MM:SS');
+    pause(5);
+    caput(pvs_rffe_sw, 2);
+    pause(0.3);
+    mcaget(h);
+    tstamp.sw_inverted{i} = datestr(mcatime(h), 'yyyy/mm/dd_HH:MM:SS');
+    pause(5);
+end
 mcaget(h);
 tstamp.end = datestr(mcatime(h), 'yyyy/mm/dd_HH:MM:SS');
+caput(pvs_rffe_att, rffeatt_origstate);
 caput(pvs_rffe_sw, rffesw_origstate);
 
 mcaclose(h);
@@ -99,16 +119,13 @@ mcaclose(h);
 % Save results to JSON file
 date_time = now;
 date_time_filename = datestr(date_time, 'yyyy-mm-dd_HH-MM-SS');
-date_json = datestr(date_time, 'yyyy/mm/dd');
-time_json = datestr(date_time, 'HH:MM:SS.FFF');
-filename = sprintf('rf_fullpath_%s_%s.json', bpm_name, date_time_filename);
+filename = sprintf('bpm_offset_%s_%s.json', bpm_name, date_time_filename);
 
 fprintf('Saving results to file ''%s''...\n\n', filename);
 
 result.bpm_name = bpm_name;
 result.tstamp = tstamp;
-result.date = date_json;
-result.time = time_json;
+result.rffe_att = rffe_att;
 
 opt.FileName = fullfile(path_file, filename);
 savejson('', result, opt);
